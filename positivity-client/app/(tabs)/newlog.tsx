@@ -1,17 +1,14 @@
 import {SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import luxon, {DateTime} from "luxon";
+import {DateTime} from "luxon";
+import {LogsContext} from "@/context/LogsContext";
 
 export default function NewLog() {
     const [logText, setLogText] = useState("");
     const [logTitle, setLogTitle] = useState("");
-    const [submitButtonEnable, setSubmitButtonEnable] = useState(isLogAllowed);
-
-    function onLoad(){
-        
-    }
-
+    const [submitButtonEnabled, setSubmitButtonEnabled] = useState(isLogAllowed);
+    const logs = useContext(LogsContext);
     function isLogAllowed() {
         let logs: any = []
         AsyncStorage.getItem("logs").then((result) => {
@@ -86,6 +83,5 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         marginBottom: 10,
-        hidden
     },
 })

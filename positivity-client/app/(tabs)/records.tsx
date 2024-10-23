@@ -1,16 +1,9 @@
 import {SafeAreaView, Text, View} from "react-native";
-import React, {useEffect, useState} from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {useContext} from "react";
+import {LogsContext} from "@/context/LogsContext";
 
 export default function Records() {
-    const [logs, setLogs] = useState([]);
-    useEffect(() => {
-        AsyncStorage.getItem('logs').then((result) => {
-            if (result !== null) {
-                setLogs(JSON.parse(result));
-            }
-        });
-    }, []);
+    const logs = useContext(LogsContext).logs;
     console.log(logs);
     if (logs.length === 0) {
         return (<Text style={{fontSize: 40}}>No logs</Text>)

@@ -7,6 +7,7 @@ import 'react-native-reanimated';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboarding from "@/app/(tabs)/onboarding";
+import {LogsContext} from "@/context/LogsContext";
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -19,16 +20,20 @@ export default function RootLayout() {
     });
     const [infoLoaded, setInfoLoaded] = useState(false);
     const [firstAppLaunch, setFirstAppLaunch] = useState(true);
-
+    const [logs, setLogs] = useState([]);
 
     useEffect(() => {
-        AsyncStorage.getItem("userInfo").then((result) => {
+        const userInfoPromise = AsyncStorage.getItem("userInfo").then((result) => {
             setFirstAppLaunch(result === null); // if no result, first app loaded is true, otherwise its false
+        })
+        const logsPromise = AsyncStorage.getItem("logs").then((result) => {
+            if (result !== null) {
+                setLogs(JSON.parse(result));
+            }
+        })
+        Promise.all([userInfoPromise, logsPromise]).then(() => {
             setInfoLoaded(true); // all done loading
         })
-        if (loaded) {
-            SplashScreen.hideAsync();
-        }
     }, [loaded]);
 
     if (!loaded && !infoLoaded) {
@@ -41,10 +46,12 @@ export default function RootLayout() {
     } else {
         return (
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-                    <Stack.Screen name="+not-found"/>
-                </Stack>
+                <LogsContext.Provider value={{"logs": logs, "setLogs": setLogs}}>
+                    <Stack>
+                        <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+                        <Stack.Screen name="+not-found"/>
+                    </Stack>
+                </LogsContext.Provider>
             </ThemeProvider>
         );
     }
