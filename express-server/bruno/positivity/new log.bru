@@ -1,0 +1,22 @@
+meta {
+  name: new log
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/api/logs/new/
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VuYSIsImVtYWlsIjoibGlvbmVsd3V5aWNoZW5AZ21haWwuY29tIiwiaWF0IjoxNzI5NjQ1OTQ4LCJleHAiOjE3Mjk3MzIzNDh9.TH9S_VGD-Bhe9Dk3JsfPJ-TWT_P-jsM19w7XvcBQWaE
+}
+
+body:json {
+  {
+    "title": "test first log",
+    "content": "test content here i am very tired :("
+  }
+}

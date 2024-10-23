@@ -14,9 +14,33 @@ datasource db {
 }
 
 model User {
+  id                   Int      @id @default(autoincrement())
+  createdAt            DateTime @default(now())
+  email                String   @unique
+  username             String
+  password             String
+  timezone             String   @default("utc")
+  surveyCompletedTime  DateTime
+  lastlogCompletedTime DateTime
+}
+
+model DailySurveys {
+  id            Int      @id @default(autoincrement())
+  ownerId       Int
+  createdAt     DateTime @default(now())
+  rating        Int
+  mood          String
+  anxietyReason String
+
+  @@index([ownerId, createdAt(sort: Desc)])
+}
+
+model DailyLogs {
   id        Int      @id @default(autoincrement())
+  ownerId   Int
   createdAt DateTime @default(now())
-  email     String   @unique
-  username  String
-  password  String
+  title     String
+  content   String
+
+  @@index([ownerId, createdAt(sort: Desc)])
 }
