@@ -20,18 +20,16 @@ export default function HomeScreen() {
 
     return (
         <SafeAreaView>
-            <TextInput style={{color: "lightgray", marginTop: 40}} placeholder={"Email..."}
+            <TextInput style={{color: "darkblue", marginTop: 40}} placeholder={"Email..."}
                        onChangeText={(e) => setEmail(e)}/>
-            <TextInput style={{color: "lightgray"}} placeholder={"Password..."} secureTextEntry={true}
+            <TextInput style={{color: "darkblue"}} placeholder={"Password..."} secureTextEntry={true}
                        onChangeText={(e) => setPassword(e)}/>
             <TouchableOpacity onPress={submit}>
                 <Text style={{color: '#FFFFFF'}}>Register</Text>
             </TouchableOpacity>
             <Text style={{textAlign: 'center', color: "lightgray", marginTop: 50}}>Already have an account?</Text>
             <TouchableOpacity>
-                <Text style={{textAlign: 'center', color: '#00BFFF'}}>
-                    Log in!
-                </Text>
+                <Text style={{textAlign: 'center', color: '#00BFFF'}}>Log in!</Text>
             </TouchableOpacity>
         </SafeAreaView>
     )

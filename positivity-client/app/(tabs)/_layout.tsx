@@ -23,15 +23,43 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
+        <Tabs.Screen
+            name="chill"
+            options={{
+                title: 'Chill',
+                tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                ),
+            }}
+        />
+        <Tabs.Screen
+            name="newlog"
+            options={{
+                title: 'NewLog',
+                tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                ),
+            }}
+        />
+        <Tabs.Screen
+            name="records"
+            options={{
+                title: 'Records',
+                tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                ),
+            }}
+        />
+        <Tabs.Screen
+            name="settings"
+            options={{
+                title: 'Settings',
+                tabBarIcon: ({ color, focused }) => (
+                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                ),
+            }}
+        />
+
     </Tabs>
   );
 }
