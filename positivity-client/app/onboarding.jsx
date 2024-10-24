@@ -9,7 +9,7 @@ export default function Onboarding() {
     function submitName() {
         setName(name.trim());
         const userInfo = JSON.stringify({"name": name});
-        AsyncStorage.setItem("userInfo", userInfo).then((e) => {
+        AsyncStorage.setItem("userInfo", userInfo).then(() => {
             console.log("data set!")
         });
     }
@@ -22,7 +22,7 @@ export default function Onboarding() {
                 <TouchableOpacity onPress={() => setStep("Enter Name")}
                                   style={styles.submitButton}><Text>Start</Text></TouchableOpacity>
             </View>}
-            {step == "Enter Name" && (
+            {step === "Enter Name" && (
                 <View>
                     <Text style={styles.paragraph}> What should we call you?</Text>
                     <TextInput style={styles.textbox} placeholder="Ben Dover..."

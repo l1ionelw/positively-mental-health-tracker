@@ -13,8 +13,8 @@ export default function Records() {
         <SafeAreaView>
             <Text>Records</Text>
             {logs.map((item) => (
-                <View key={item.createdAt}>
-                    <Text>{item.createdAt}</Text>
+                <View key={item.createdAt.toString()}>
+                    <Text>{item.createdAt.toString()}</Text>
                     <Text>{item.title}</Text>
                     <Text>{item.content}</Text>
                 </View>

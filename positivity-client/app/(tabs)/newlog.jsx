@@ -2,39 +2,38 @@ import {SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from "react
 import React, {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {DateTime} from "luxon";
-import {LogsContext} from "@/context/LogsContext";
+import {LogsContext} from "../../context/LogsContext";
+import {produce} from "immer";
 
 export default function NewLog() {
     const [logText, setLogText] = useState("");
     const [logTitle, setLogTitle] = useState("");
-    const [submitButtonEnabled, setSubmitButtonEnabled] = useState(isLogAllowed);
-    const logs = useContext(LogsContext);
+    const [error, setError] = useState("");
+    const logs = useContext(LogsContext).logs;
+    const setLogs = useContext(LogsContext).setLogs
+
     function isLogAllowed() {
-        let logs: any = []
-        AsyncStorage.getItem("logs").then((result) => {
-            if (result !== null) {
-                logs = JSON.parse(result);
-            }
-            const now = DateTime.now().startOf("day");
-            const last_log_completed = DateTime.fromJSDate(logs[logs.length - 1]).startOf("day");
-            const diff = now.diff(last_log_completed, ["days", "hours"]).days;
-            return diff >= 1;
-        });
+        if (logs.length === 0) return true;
+        const now = DateTime.now().toLocal().startOf("day");
+        const last_log_completed = DateTime.fromISO(logs[logs.length - 1].createdAt).toLocal().startOf("day");
+        const diff = now.diff(last_log_completed, ["days", "hours"]).days;
+        return diff >= 1;
     }
 
     function submitLog() {
-        let logs: any = [];
-        AsyncStorage.getItem("logs").then((result) => {
-            if (result !== null) {
-                logs = JSON.parse(result);
-            }
-            console.log(logs);
-            logs.push({"createdAt": new Date(), "title": logTitle.trim(), "content": logText.trim()})
-            AsyncStorage.setItem("logs", JSON.stringify(logs)).then((e) => {
-                console.log("New data: ");
-                console.log(logs);
-            });
-        });
+        if (!logTitle) {
+            setError("Your title is missing");
+            return;
+        }
+        if (!isLogAllowed()) {
+            setError("You've already created a log today");
+            return
+        }
+        const newLogsDraft = produce(logs, draft => {
+            draft.push({"createdAt": new Date(), "title": logTitle.trim(), "content": logText.trim()})
+        })
+        setLogs(newLogsDraft);
+        AsyncStorage.setItem('logs', JSON.stringify(newLogsDraft));
     }
 
     return (
@@ -46,7 +45,9 @@ export default function NewLog() {
             <TextInput style={styles.textbox} onChangeText={(text) => {
                 setLogText(text)
             }} placeholder="Enter your log here..." multiline={true}></TextInput>
-            <TouchableOpacity style={styles.submitButton} onPress={submitLog}><Text>Submit</Text></TouchableOpacity>
+            <TouchableOpacity style={isLogAllowed() ? styles.submitButton : styles.submitButtonDisabled}
+                              onPress={submitLog}><Text>Submit</Text></TouchableOpacity>
+            <Text style={styles.error}>{error}</Text>
         </SafeAreaView>
     )
 }
@@ -59,7 +60,13 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         borderRadius: 5,
     },
-
+    submitButtonDisabled: {
+        backgroundColor: '#b3b3b3',
+        alignSelf: 'center',
+        paddingHorizontal: 45,
+        paddingVertical: 16,
+        borderRadius: 5,
+    },
     titleBox: {
         backgroundColor: '#EEEEEE',
         borderRadius: 12.5,
@@ -84,4 +91,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginBottom: 10,
     },
+    error: {
+        alignSelf: "center",
+    }
 })
