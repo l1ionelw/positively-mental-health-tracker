@@ -18,14 +18,18 @@ export default function RootLayout() {
     const [loaded] = useFonts({
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     });
-    const [infoLoaded, setInfoLoaded] = useState(false);
-    const [firstAppLaunch, setFirstAppLaunch] = useState(true);
+    const [infoLoaded, setInfoLoaded] = useState(null);
+    const [firstAppLaunchStatus, setFirstAppLaunchStatus] = useState("Loading");
     const [logs, setLogs] = useState([]);
     const [surveys, setSurveys] = useState([]);
+    const [userInfo, setUserInfo] = useState({});
 
     useEffect(() => {
         const userInfoPromise = AsyncStorage.getItem("userInfo").then((result) => {
-            setFirstAppLaunch(result === null); // if no result, first app loaded is true, otherwise its false
+            setFirstAppLaunchStatus(result === null ? "Onboarding" : "Home"); // if no result, first app loaded is true, otherwise its false
+            if (result !== null) {
+                setUserInfo(JSON.parse(result))
+            }
         })
         const logsPromise = AsyncStorage.getItem("logs").then((result) => {
             if (result !== null) {
@@ -37,23 +41,29 @@ export default function RootLayout() {
                 setSurveys(JSON.parse(result))
             }
         })
-        Promise.all([userInfoPromise, logsPromise, surveysPromise]).then(() => {
+        Promise.all([logsPromise, surveysPromise, userInfoPromise]).then(() => {
             setInfoLoaded(true); // all done loading
         })
     }, [loaded]);
 
-    if (!loaded && !infoLoaded) {
+    if (!loaded || !infoLoaded || firstAppLaunchStatus === "Loading") {
         return null;
     }
 
-    if (firstAppLaunch) {
+    if (firstAppLaunchStatus === "Onboarding") {
         console.log("launching first app launch experience");
-        return <Onboarding/>
+        return <Onboarding setFirstAppLaunch={setFirstAppLaunchStatus}/>
     } else {
         return (
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                 <AppContext.Provider
-                    value={{"logs": logs, "setLogs": setLogs, "surveys": surveys, "setSurveys": setSurveys}}>
+                    value={{
+                        "logs": logs,
+                        "setLogs": setLogs,
+                        "surveys": surveys,
+                        "setSurveys": setSurveys,
+                        "userInfo": userInfo
+                    }}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
                         <Stack.Screen name="+not-found"/>

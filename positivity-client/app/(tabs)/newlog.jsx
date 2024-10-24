@@ -30,7 +30,7 @@ export default function NewLog() {
             return
         }
         const newLogsDraft = produce(logs, draft => {
-            draft.push({"createdAt": new Date(), "title": logTitle.trim(), "content": logText.trim()})
+            draft.push({"createdAt": DateTime.now().toLocal().toISO(), "title": logTitle.trim(), "content": logText.trim()})
         })
         setLogs(newLogsDraft);
         AsyncStorage.setItem('logs', JSON.stringify(newLogsDraft));

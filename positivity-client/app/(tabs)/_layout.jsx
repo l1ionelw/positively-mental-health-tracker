@@ -28,7 +28,7 @@ export default function TabLayout() {
             options={{
                 title: 'Chill',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'fitness' : 'fitness-outline'} color={color} />
                 ),
             }}
         />
@@ -37,7 +37,7 @@ export default function TabLayout() {
             options={{
                 title: 'Log',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'add-circle' : 'add-circle-outline'} color={color} />
                 ),
             }}
         />
@@ -46,7 +46,7 @@ export default function TabLayout() {
             options={{
                 title: 'Records',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
                 ),
             }}
         />
@@ -55,7 +55,7 @@ export default function TabLayout() {
             options={{
                 title: 'Settings',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
                 ),
             }}
         />

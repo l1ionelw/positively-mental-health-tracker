@@ -2,7 +2,7 @@ import React, {SafeAreaView, TextInput, View, Text, TouchableOpacity, StyleSheet
 import {useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Onboarding() {
+export default function Onboarding({setFirstAppLaunch}) {
     const [step, setStep] = useState("Welcome");
     const [name, setName] = useState("");
 
@@ -10,15 +10,21 @@ export default function Onboarding() {
         setName(name.trim());
         const userInfo = JSON.stringify({"name": name});
         AsyncStorage.setItem("userInfo", userInfo).then(() => {
-            console.log("data set!")
+            setFirstAppLaunch(false);
         });
     }
 
     return (
         <SafeAreaView style={styles.centered}>
             {step === "Welcome" && <View>
-                <Text style={styles.header}>  Welcome to</Text>
-                <Text style={{fontWeight: "bold", fontSize: 40, marginLeft: 5, marginRight: 5, marginBottom: 10,}}>Positively</Text>
+                <Text style={styles.header}> Welcome to</Text>
+                <Text style={{
+                    fontWeight: "bold",
+                    fontSize: 40,
+                    marginLeft: 5,
+                    marginRight: 5,
+                    marginBottom: 10,
+                }}>Positively</Text>
                 <TouchableOpacity onPress={() => setStep("Enter Name")}
                                   style={styles.submitButton}><Text>Start</Text></TouchableOpacity>
             </View>}
@@ -30,8 +36,7 @@ export default function Onboarding() {
                     <TouchableOpacity style={styles.submitButton}
                                       onPress={submitName}><Text>Done</Text></TouchableOpacity>
                 </View>
-            )
-            }
+            )}
         </SafeAreaView>
     )
 }
