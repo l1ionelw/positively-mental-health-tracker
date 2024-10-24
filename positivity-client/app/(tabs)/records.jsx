@@ -1,10 +1,9 @@
 import {SafeAreaView, Text, View} from "react-native";
 import React, {useContext} from "react";
-import {LogsContext} from "@/context/LogsContext";
+import {AppContext} from "../../context/AppContext";
 
 export default function Records() {
-    const logs = useContext(LogsContext).logs;
-    console.log(logs);
+    const logs = useContext(AppContext).logs;
     if (logs.length === 0) {
         return (<Text style={{fontSize: 40}}>No logs</Text>)
     }

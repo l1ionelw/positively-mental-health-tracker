@@ -2,15 +2,15 @@ import {SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from "react
 import React, {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {DateTime} from "luxon";
-import {LogsContext} from "../../context/LogsContext";
+import {AppContext} from "../../context/AppContext";
 import {produce} from "immer";
 
 export default function NewLog() {
     const [logText, setLogText] = useState("");
     const [logTitle, setLogTitle] = useState("");
     const [error, setError] = useState("");
-    const logs = useContext(LogsContext).logs;
-    const setLogs = useContext(LogsContext).setLogs
+    const logs = useContext(AppContext).logs;
+    const setLogs = useContext(AppContext).setLogs
 
     function isLogAllowed() {
         if (logs.length === 0) return true;

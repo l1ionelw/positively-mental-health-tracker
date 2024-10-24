@@ -6,8 +6,8 @@ import {useEffect, useState} from 'react';
 import 'react-native-reanimated';
 import {useColorScheme} from '@/hooks/useColorScheme';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {LogsContext} from "@/context/LogsContext";
 import Onboarding from "./onboarding";
+import {AppContext} from "../context/AppContext";
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -21,6 +21,7 @@ export default function RootLayout() {
     const [infoLoaded, setInfoLoaded] = useState(false);
     const [firstAppLaunch, setFirstAppLaunch] = useState(true);
     const [logs, setLogs] = useState([]);
+    const [surveys, setSurveys] = useState([]);
 
     useEffect(() => {
         const userInfoPromise = AsyncStorage.getItem("userInfo").then((result) => {
@@ -31,7 +32,12 @@ export default function RootLayout() {
                 setLogs(JSON.parse(result));
             }
         })
-        Promise.all([userInfoPromise, logsPromise]).then(() => {
+        const surveysPromise = AsyncStorage.getItem("surveys").then((result) => {
+            if (result !== null) {
+                setSurveys(JSON.parse(result))
+            }
+        })
+        Promise.all([userInfoPromise, logsPromise, surveysPromise]).then(() => {
             setInfoLoaded(true); // all done loading
         })
     }, [loaded]);
@@ -46,12 +52,13 @@ export default function RootLayout() {
     } else {
         return (
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <LogsContext.Provider value={{"logs": logs, "setLogs": setLogs}}>
+                <AppContext.Provider
+                    value={{"logs": logs, "setLogs": setLogs, "surveys": surveys, "setSurveys": setSurveys}}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
                         <Stack.Screen name="+not-found"/>
                     </Stack>
-                </LogsContext.Provider>
+                </AppContext.Provider>
             </ThemeProvider>
         );
     }
