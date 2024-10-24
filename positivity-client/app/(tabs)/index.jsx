@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState, useSyncExternalStore} from "react";
+import React, {createContext, useContext, useEffect, useState, useSyncExternalStore} from "react";
 import {Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
 import {AppContext} from "../../context/AppContext";
 import {DateTime} from "luxon";
@@ -134,10 +134,11 @@ export default function App() {
             <View style={styles.row}>
                 <View style={styles.widgetContainer}>
                     <Text>Make a new log</Text>
-                    <Image style={{ width: 100, height: 100}} tintColor ={'#000000'} source={require('../../assets/images/journal-outline.png')}/>
+                    <Image style={{ width: 100, height: 100, alignSelf: "center"}} tintColor ={'#000000'} source={require('../../assets/images/book-outline.png')}/>
                 </View>
                 <View style={styles.widgetContainer}>
                     <Text>Change the notification</Text>
+                    <Image style={{ width: 100, height: 100, alignSelf: "center"}} tintColor ={'#000000'} source={require('../../assets/images/notifications-circle-outline.png')}/>
                 </View>
             </View>
         </SafeAreaView>
