@@ -1,5 +1,5 @@
-import React, {createContext, useContext, useEffect, useState, useSyncExternalStore} from "react";
-import {Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
+import React, {useContext, useEffect, useState} from "react";
+import {Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
 import {AppContext} from "../../context/AppContext";
 import {DateTime} from "luxon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -86,9 +86,9 @@ export default function App() {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.viewMargins}>
             <Text style={styles.headers}>POSITIVELY</Text>
-            <Text style={styles.headers}>Welcome Back, {userName}</Text>
+            <Text style={styles.headersSecondary}>Welcome Back, {userName}</Text>
             {surveyState === "Incomplete" &&
                 <View style={styles.container}>
                     <View style={{marginLeft: 10, marginRight: 10}}>
@@ -144,11 +144,18 @@ export default function App() {
     )
 }
 const styles = StyleSheet.create({
+    viewMargins: {
+        marginTop: 60,
+        marginLeft: 30,
+        marginRight: 30
+    },
     headers: {
-        alignSelf: "center",
-        marginTop: 10,
-        fontSize: 20,
+        fontSize: 40,
         fontWeight: "bold"
+    },
+    headersSecondary: {
+        fontSize: 20,
+        paddingBottom: 10,
     },
     button: {
         paddingTop: 20,

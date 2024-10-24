@@ -1,8 +1,8 @@
-import { Dimensions, SafeAreaView, Text, View, StyleSheet } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../context/AppContext";
-import { DateTime } from "luxon";
-import { LineChart } from "react-native-chart-kit";
+import {Dimensions, SafeAreaView, Text, View, StyleSheet} from "react-native";
+import React, {useContext, useEffect, useState} from "react";
+import {AppContext} from "../../context/AppContext";
+import {DateTime} from "luxon";
+import {LineChart} from "react-native-chart-kit";
 
 export default function Records() {
     const logs = useContext(AppContext).logs;
@@ -13,7 +13,7 @@ export default function Records() {
     let surveyRatings = [];
 
     for (let survey of surveyData) {
-        if (survey == null || survey['rating'] == undefined) {
+        if (survey == null || survey['rating'] === undefined) {
             continue;
         }
         surveyRatings.push(survey['rating']);
@@ -71,22 +71,20 @@ export default function Records() {
         // Process logs
         for (let log of logs) {
             const day = DateTime.fromISO(log.createdAt).startOf("day").toISO();
-            if (tempData.has(day)) {
-                let existing = tempData.get(day);
-                tempData.set(day, { ...existing, logCreatedAt: log.createdAt, logTitle: log.title, logContent: log.content });
-            } else {
-                tempData.set(day, { logCreatedAt: log.createdAt, logTitle: log.title, logContent: log.content });
-            }
+            tempData.set(day, {
+                logCreatedAt: log.createdAt,
+                logTitle: log.title,
+                logContent: log.content
+            })
         }
 
-        // Process surveyData
         for (let survey of surveyData) {
             const day = DateTime.fromISO(survey.createdAt).startOf("day").toISO();
             if (tempData.has(day)) {
                 let existing = tempData.get(day);
-                tempData.set(day, { ...existing, surveyData: survey });
+                tempData.set(day, {...existing, ...survey});
             } else {
-                tempData.set(day, { surveyData: survey });
+                tempData.set(day, survey);
             }
         }
 
@@ -94,17 +92,39 @@ export default function Records() {
     }, [logs, surveyData]);
 
     if (logs.length === 0 && surveyData.length === 0) {
-        return <SafeAreaView><Text style={{ fontSize: 40 }}>No logs</Text></SafeAreaView>;
+        return <SafeAreaView style={styles.viewMargins}><Text style={{fontSize: 25}}>You haven't done anything
+            yet!</Text></SafeAreaView>;
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.viewMargins}>
             <Text style={styles.header}>Records</Text>
-            <LineGraph />
+            <LineGraph/>
             {allData.length > 0 ? (
                 allData.map(([dateKey, data], index) => {
+                    const surveyString = `${data.mood ? `You felt ${data.surveyData}` : ""}`;
+                    console.log(surveyString);
+                    console.log(data)
+                    return (
+                        <View style={styles.container}>
+                            <View style={styles.logContainer}>
+                                <Text style={{fontWeight: "bold"}}>{data.logTitle}</Text>
+                                <Text>{DateTime.fromISO(dateKey).toLocaleString({
+                                    month: "long",
+                                    day: "numeric",
+                                    year: "numeric"
+                                })}</Text>
+                                <Text>{surveyString}</Text>
+                                <Text>{JSON.stringify(data)}</Text>
+                            </View>
+                        </View>
+                    )
                     const dateCreated = data.surveyData?.createdAt || data.logCreatedAt;
-                    const formattedDate = DateTime.fromISO(dateCreated).toLocaleString({ year: 'numeric', month: '2-digit', day: '2-digit' });
+                    const formattedDate = DateTime.fromISO(dateCreated).toLocaleString({
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    });
 
                     if (!data.logTitle && !data.logContent && !data.surveyData) {
                         return null;
@@ -122,7 +142,7 @@ export default function Records() {
                             {data.logTitle ? (
                                 <>
                                     <Text>I felt {currentSurveyMood} and rated my day {currentSurveyValue}/10</Text>
-                                    <Text style={{ fontSize: 16, marginTop: 15 }}>{data.logContent}</Text>
+                                    <Text style={{fontSize: 16, marginTop: 15}}>{data.logContent}</Text>
                                 </>
                             ) : (
                                 <Text></Text>
@@ -145,15 +165,23 @@ const styles = StyleSheet.create({
         backgroundColor: "#e6e6e6",
         borderRadius: 10,
     },
+    logContainer: {
+        marginTop: 20,
+        marginBottom: 20,
+        marginLeft: 15,
+        marginRight: 15
+    },
     header: {
-        alignSelf: "center",
-        marginTop: 10,
-        fontSize: 25,
+        fontSize: 40,
         fontWeight: "bold",
     },
     logHeader: {
-        marginTop: 10,
         fontSize: 18,
         fontWeight: "bold",
+    },
+    viewMargins: {
+        marginTop: 60,
+        marginLeft: 30,
+        marginRight: 30
     },
 });
