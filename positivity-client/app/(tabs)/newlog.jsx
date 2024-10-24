@@ -10,7 +10,7 @@ export default function NewLog() {
     const [logTitle, setLogTitle] = useState("");
     const [error, setError] = useState("");
     const logs = useContext(AppContext).logs;
-    const setLogs = useContext(AppContext).setLogs
+    const setLogs = useContext(AppContext).setLogs;
 
     function isLogAllowed() {
         if (logs.length === 0) return true;
@@ -19,6 +19,61 @@ export default function NewLog() {
         const diff = now.diff(last_log_completed, ["days", "hours"]).days;
         return diff >= 1;
     }
+
+    let exampleLogs = [
+        {
+            "createdAt": "2024-10-24T06:49:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I played basketball. The recipe I tried turned out surprisingly well! I had fun experimenting with new ingredients, and the flavors blended perfectly. I learned the importance of precision and patience in cooking."
+        },
+        {
+            "createdAt": "2024-10-24T17:51:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I met up with old friends. Swimming was refreshing and challenging at the same time. I focused on improving my stroke techniques and pacing myself better. It felt rewarding to finish more laps than I expected."
+        },
+        {
+            "createdAt": "2024-10-24T17:05:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I tried a new recipe. The concert was exhilarating. The energy of the crowd, combined with the amazing performance, made me forget about everything else. I left feeling inspired and creatively energized."
+        },
+        {
+            "createdAt": "2024-10-24T05:40:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I went swimming. Painting the landscape took longer than I expected, but the process was therapeutic. Each brushstroke allowed me to focus on details I hadn’t noticed before. It gave me a sense of peace."
+        },
+        {
+            "createdAt": "2024-10-24T07:45:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I read a book. Painting the landscape took longer than I expected, but the process was therapeutic. Each brushstroke allowed me to focus on details I hadn’t noticed before. It gave me a sense of peace."
+        },
+        {
+            "createdAt": "2024-10-24T09:16:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I went to a concert. Painting the landscape took longer than I expected, but the process was therapeutic. Each brushstroke allowed me to focus on details I hadn’t noticed before. It gave me a sense of peace."
+        },
+        {
+            "createdAt": "2024-10-24T08:48:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I tried a new recipe. I finally finished reading that book I’d been putting off for months. The story was captivating, and I got completely lost in it. It gave me a fresh perspective on life and relationships."
+        },
+        {
+            "createdAt": "2024-10-24T07:09:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I tried a new recipe. Building the robot was an intricate process, but seeing it move according to my programming was incredibly satisfying. It was a reminder of how much I enjoy creating things from scratch."
+        },
+        {
+            "createdAt": "2024-10-24T10:16:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I met up with old friends. The recipe I tried turned out surprisingly well! I had fun experimenting with new ingredients, and the flavors blended perfectly. I learned the importance of precision and patience in cooking."
+        },
+        {
+            "createdAt": "2024-10-24T18:34:14.838222",
+            "title": "Daily Reflection",
+            "content": "Today I studied for my exam. Hiking was absolutely breathtaking. The view from the top of the mountain was worth the effort. I had a chance to reflect on my goals while enjoying nature."
+        }
+    ];
+
+
 
     function submitLog() {
         if (!logTitle) {

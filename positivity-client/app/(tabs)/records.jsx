@@ -34,11 +34,11 @@ export default function Records() {
                             },
                         ],
                     }}
-                    width={screenWidth}
+                    width={screenWidth/1.1}
                     height={220}
                     yAxisInterval={0.1}
-                    yMin={minValue}
-                    yMax={maxValue}
+                    yMin={(surveyRatings.length > 0) ? minValue: (0)}
+                    yMax={(surveyRatings.length > 0) ? maxValue: (10)}
                     chartConfig={{
                         backgroundColor: "#e26a00",
                         backgroundGradientFrom: "#fb8c00",
@@ -58,6 +58,7 @@ export default function Records() {
                     style={{
                         marginVertical: 8,
                         borderRadius: 16,
+                        alignSelf:"center"
                     }}
                 />
             </View>

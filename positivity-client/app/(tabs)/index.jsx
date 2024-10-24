@@ -32,7 +32,6 @@ export default function App() {
             setTodaysMood(surveys[surveys.length - 1].mood ?? "")
         }
     }, [])
-
     function isSurveyCompletedToday() {
         if (!surveys || surveys.length === 0) return false;
         const now = DateTime.now().toLocal().startOf("day");
