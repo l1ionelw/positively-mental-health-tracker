@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
+import {Keyboard, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity} from "react-native";
 import React, {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {DateTime} from "luxon";
@@ -34,6 +34,7 @@ export default function NewLog() {
         })
         setLogs(newLogsDraft);
         AsyncStorage.setItem('logs', JSON.stringify(newLogsDraft));
+        Keyboard.dismiss();
     }
 
     return (
