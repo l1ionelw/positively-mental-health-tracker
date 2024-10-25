@@ -1,15 +1,16 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
+import {Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView} from "react-native";
 import {AppContext} from "../../context/AppContext";
 import {DateTime} from "luxon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {produce} from "immer";
 import {Dropdown} from 'react-native-element-dropdown';
 
+
 export default function App() {
     const [surveyState, setSurveyState] = useState("Incomplete");
     const surveys = useContext(AppContext).surveys;
-    const setSurveys = useContext(AppContext).setSurveys
+    const setSurveys = useContext(AppContext).setSurveys;
     const [todaysRating, setTodaysRating] = useState(-1);
     const [todaysMood, setTodaysMood] = useState("");
     const userName = useContext(AppContext).userInfo.name;
@@ -26,12 +27,14 @@ export default function App() {
         {label: 'Tired', value: '6'},
         {label: 'Lethargic', value: '6'},
     ];
+
     useEffect(() => {
         if (isSurveyCompletedToday()) {
             setTodaysRating(surveys[surveys.length - 1].rating ?? -1);
             setTodaysMood(surveys[surveys.length - 1].mood ?? "")
         }
     }, [])
+
     function isSurveyCompletedToday() {
         if (!surveys || surveys.length === 0) return false;
         const now = DateTime.now().toLocal().startOf("day");
@@ -86,61 +89,68 @@ export default function App() {
     }
 
     return (
-        <SafeAreaView style={styles.viewMargins}>
-            <Text style={styles.headers}>POSITIVELY</Text>
-            <Text style={styles.headersSecondary}>Welcome Back, {userName}</Text>
-            {surveyState === "Incomplete" &&
-                <View style={styles.container}>
-                    <View style={{marginLeft: 10, marginRight: 10}}>
-                        <Text style={{alignSelf: "center", marginBottom: 20, marginTop: 10}}>How are you feeling
-                            today?</Text>
-                        <View style={styles.row}>
-                            {[...Array(5)].map((x, i) => (
-                                <TouchableOpacity key={i + 1}
-                                                  style={(i + 1 === todaysRating) ? styles.submittedButton : styles.button}
-                                                  onPress={() => {
-                                                      submitRating(i + 1);
-                                                  }}><Text>{i + 1}</Text></TouchableOpacity>
-                            ))}
+        <ScrollView>
+            <SafeAreaView style={styles.viewMargins}>
+                <Text style={styles.headers}>POSITIVELY</Text>
+                <Text style={styles.headersSecondary}>Welcome Back, {userName}</Text>
+                {surveyState === "Incomplete" &&
+                    <View style={styles.container}>
+                        <View style={{marginLeft: 10, marginRight: 10}}>
+                            <Text style={{alignSelf: "center", marginBottom: 20, marginTop: 10}}>How are you feeling
+                                today?</Text>
+                            <View style={styles.row}>
+                                {[...Array(5)].map((x, i) => (
+                                    <TouchableOpacity key={i + 1}
+                                                      style={(i + 1 === todaysRating) ? styles.submittedButton : styles.button}
+                                                      onPress={() => {
+                                                          submitRating(i + 1);
+                                                      }}><Text>{i + 1}</Text></TouchableOpacity>
+                                ))}
+                            </View>
+                            <View style={styles.row}>
+                                {[...Array(4)].map((x, i) => (
+                                    <TouchableOpacity key={i + 6}
+                                                      style={(i + 6 === todaysRating) ? styles.submittedButton : styles.button}
+                                                      onPress={() => {
+                                                          submitRating(i + 6);
+                                                      }}><Text>{i + 6}</Text></TouchableOpacity>
+                                ))}
+                                <TouchableOpacity key={10}
+                                                  style={todaysRating === 10 ? styles.submittedTenButton : styles.tenButton}
+                                                  onPress={() => submitRating(10)}><Text>{10}</Text></TouchableOpacity>
+                            </View>
                         </View>
-                        <View style={styles.row}>
-                            {[...Array(4)].map((x, i) => (
-                                <TouchableOpacity key={i + 6}
-                                                  style={(i + 6 === todaysRating) ? styles.submittedButton : styles.button}
-                                                  onPress={() => {
-                                                      submitRating(i + 6);
-                                                  }}><Text>{i + 6}</Text></TouchableOpacity>
-                            ))}
-                            <TouchableOpacity key={10}
-                                              style={todaysRating === 10 ? styles.submittedTenButton : styles.tenButton}
-                                              onPress={() => submitRating(10)}><Text>{10}</Text></TouchableOpacity>
-                        </View>
+                    </View>}
+                <View style={styles.dropdownContainer}>
+                    <Text style={{fontSize: 14, padding: 10, paddingBottom: 18, paddingTop: 18}}> How'd you describe how
+                        you're feeling today? </Text>
+                    <Dropdown
+                        style={styles.dropdown}
+                        data={moodList}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={`${todaysMood ?? "Select"}`}
+                        onChange={(item) => submitMood(item)}
+                    />
+                </View>
+                <View style={styles.row}>
+                    <View style={styles.widgetContainer}>
+                        <Text>Make a new log</Text>
+                        <TouchableOpacity><Image
+                            style={{width: 100, height: 100, alignSelf: "center"}}
+                            tintColor={'#000000'}
+                            source={require('../../assets/images/book-outline.png')}/></TouchableOpacity>
                     </View>
-                </View>}
-            <View style={styles.dropdownContainer}>
-                <Text style={{fontSize: 14, padding: 10, paddingBottom: 18, paddingTop: 18}}> How'd you describe how
-                    you're feeling today? </Text>
-                <Dropdown
-                    style={styles.dropdown}
-                    data={moodList}
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={`${todaysMood ?? "Select"}`}
-                    onChange={(item) => submitMood(item)}
-                />
-            </View>
-            <View style={styles.row}>
-                <View style={styles.widgetContainer}>
-                    <Text>Make a new log</Text>
-                    <Image style={{ width: 100, height: 100, alignSelf: "center"}} tintColor ={'#000000'} source={require('../../assets/images/book-outline.png')}/>
+                    <View style={styles.widgetContainer}>
+                        <Text>Change the notification</Text>
+                        <TouchableOpacity><Image style={{width: 100, height: 100, alignSelf: "center"}}
+                                                 tintColor={'#000000'}
+                                                 source={require('../../assets/images/notifications-circle-outline.png')}/></TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.widgetContainer}>
-                    <Text>Change the notification</Text>
-                    <Image style={{ width: 100, height: 100, alignSelf: "center"}} tintColor ={'#000000'} source={require('../../assets/images/notifications-circle-outline.png')}/>
-                </View>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({

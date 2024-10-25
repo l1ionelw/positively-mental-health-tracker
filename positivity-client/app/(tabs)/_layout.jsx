@@ -1,9 +1,22 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import {Image, View} from 'react-native';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import {NavigationContainer} from "@react-navigation/native";
+
+const CustomTabIcon = ({ focused }) => {
+    return (
+        <View>
+            <Image
+                source={focused ? require('../../assets/images/gemini.png') : require('../../assets/images/gemini.png')}
+                style={{ width: 24, height: 24, backgroundColor: (focused)?"#adbada": "", borderRadius: 5,}}
+            />
+        </View>
+    );
+};
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -26,9 +39,9 @@ export default function TabLayout() {
         <Tabs.Screen
             name="chill"
             options={{
-                title: 'Chill',
+                title: 'AI',
                 tabBarIcon: ({ color, focused }) => (
-                    <TabBarIcon name={focused ? 'fitness' : 'fitness-outline'} color={color} />
+                    <CustomTabIcon focused={focused} />
                 ),
             }}
         />
@@ -61,5 +74,6 @@ export default function TabLayout() {
         />
 
     </Tabs>
+
   );
 }

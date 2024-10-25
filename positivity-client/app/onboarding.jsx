@@ -1,14 +1,16 @@
 import React, {SafeAreaView, TextInput, View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native'
-import {useState} from "react";
+import {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {AppContext} from "../context/AppContext";
 
 export default function Onboarding({setFirstAppLaunch}) {
     const [step, setStep] = useState("Welcome");
     const [name, setName] = useState("");
 
     function submitName() {
-        setName(name.trim());
-        const userInfo = JSON.stringify({"name": name});
+        if (name.trim().length === 0) return;
+        const newData = {"name": name.trim()}
+        const userInfo = JSON.stringify(newData);
         AsyncStorage.setItem("userInfo", userInfo).then(() => {
             setFirstAppLaunch(false);
         });
@@ -31,7 +33,7 @@ export default function Onboarding({setFirstAppLaunch}) {
             {step === "Enter Name" && (
                 <View>
                     <Text style={styles.paragraph}> What should we call you?</Text>
-                    <TextInput style={styles.textbox} placeholder="Ben Dover..."
+                    <TextInput style={styles.textbox} placeholder="Mary Poppins..."
                                onChangeText={(e) => setName(e)}></TextInput>
                     <TouchableOpacity style={styles.submitButton}
                                       onPress={submitName}><Text>Done</Text></TouchableOpacity>

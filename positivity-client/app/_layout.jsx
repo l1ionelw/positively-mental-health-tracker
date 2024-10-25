@@ -44,7 +44,7 @@ export default function RootLayout() {
         Promise.all([logsPromise, surveysPromise, userInfoPromise]).then(() => {
             setInfoLoaded(true); // all done loading
         })
-    }, [loaded]);
+    }, [firstAppLaunchStatus]);
 
     if (!loaded || !infoLoaded || firstAppLaunchStatus === "Loading") {
         return null;
@@ -62,7 +62,8 @@ export default function RootLayout() {
                         "setLogs": setLogs,
                         "surveys": surveys,
                         "setSurveys": setSurveys,
-                        "userInfo": userInfo
+                        "userInfo": userInfo,
+                        "setUserInfo": setUserInfo,
                     }}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
