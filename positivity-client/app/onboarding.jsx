@@ -2,6 +2,7 @@ import React, {SafeAreaView, TextInput, View, Text, TouchableOpacity, StyleSheet
 import {useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {AppContext} from "../context/AppContext";
+import {Colors} from "../constants/Colors";
 
 export default function Onboarding({setFirstAppLaunch}) {
     const [step, setStep] = useState("Welcome");
@@ -33,7 +34,7 @@ export default function Onboarding({setFirstAppLaunch}) {
             {step === "Enter Name" && (
                 <View>
                     <Text style={styles.paragraph}> What should we call you?</Text>
-                    <TextInput style={styles.textbox} placeholder="Mary Poppins..."
+                    <TextInput style={styles.textbox} placeholderTextColor="#c1c1c1" placeholder="Mary Poppins..."
                                onChangeText={(e) => setName(e)}></TextInput>
                     <TouchableOpacity style={styles.submitButton}
                                       onPress={submitName}><Text>Done</Text></TouchableOpacity>
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: Dimensions.get("window").height / 4,
+        backgroundColor: "#fff"
     },
     header: {
         fontSize: 40,
@@ -73,6 +75,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 10,
         margin: 15,
+        color: "#000"
     },
     submitButton: {
         backgroundColor: '#7E8D69',

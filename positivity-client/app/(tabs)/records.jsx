@@ -2,6 +2,7 @@ import {Dimensions, SafeAreaView, Text, View, StyleSheet, ScrollView} from "reac
 import React, {useContext, useEffect, useState} from "react";
 import {AppContext} from "../../context/AppContext";
 import {DateTime} from "luxon";
+import {Colors} from "../../constants/Colors";
 
 export default function Records() {
     const logs = useContext(AppContext).logs;
@@ -104,7 +105,8 @@ export default function Records() {
                     allData.map(([dateKey, data], index) => {
                             const surveyString = `${data.mood ? `${data.mood} - ` : ""} ${data.rating ? `${data.rating}/10` : ""}`
                             return (
-                                <View style={styles.container} key={dateKey}>
+                                <View style={[styles.container, {
+                                    backgroundColor: (darkMode)?Colors.dark.background : Colors.light.background,}]} key={dateKey}>
                                     <View style={styles.logContainer}>
                                         <Text>{DateTime.fromISO(dateKey).toLocaleString({
                                             month: "long",
@@ -132,7 +134,6 @@ export default function Records() {
 const styles = StyleSheet.create({
     container: {
         marginBottom: 10,
-        backgroundColor: "#e6e6e6",
         borderRadius: 10,
     },
     logContainer: {

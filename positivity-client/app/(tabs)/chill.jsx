@@ -2,11 +2,13 @@ import {SafeAreaView, TouchableOpacity, View, Image, StyleSheet,  Dimensions, Te
 import React, {useContext, useState} from "react";
 import {sendAiRequest} from "../../utils/gemini";
 import {AppContext} from "../../context/AppContext";
+import {Colors} from "../../constants/Colors";
 
 export default function Chill() {
     const logs = useContext(AppContext).logs;
     const [aiStatus, setAiStatus] = useState("Idle") // Idle, Loading, Generated
     const [aiMessage, setAiMessage] = useState("");
+    const darkMode = useContext(AppContext).userInfo.darkMode;
 
     function generateAiActivities() {
         setAiStatus("Loading");
@@ -23,23 +25,23 @@ export default function Chill() {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style = {{backgroundColor: (darkMode)?Colors.dark.background:Colors.light.background}}>
         <SafeAreaView style={styles.viewMargins}>
-            <Text style={styles.header}>AI</Text>
+            <Text style={[styles.header, {color: darkMode ? Colors.dark.text : Colors.light.text}]}>AI</Text>
             <View style={styles.container}>
                 <Image source={require("../../assets/images/gemini.png")} style={{width: 50, height: 50}}/>
                 {aiStatus === "Idle" &&
-                    <Text style={{marginBottom: 10}}>Hi! I'm your personal AI assistant. Feeling bored? I can read your
+                    <Text style={{marginBottom: 10, color: darkMode ? Colors.dark.text : Colors.light.text}}>Hi! I'm your personal AI assistant. Feeling bored? I can read your
                         logs and generate you some activities I think you'd like! Press generate to try me out.</Text>}
-                <Text style={{fontWeight: "bold", marginBottom: 10, marginTop: 10}}>Powered by Google Gemini</Text>
+                <Text style={{fontWeight: "bold", marginBottom: 10, marginTop: 10, color: darkMode ? Colors.dark.text : Colors.light.text}}>Powered by Google Gemini</Text>
                 {aiStatus === "Idle" &&
                     <TouchableOpacity style={{backgroundColor: "lightblue", borderRadius: 10}} onPress={() => {
                         generateAiActivities()
                     }}><Text
                         style={{paddingTop: 10, paddingBottom: 10, paddingRight: 10, paddingLeft: 10}}>Generate!</Text></TouchableOpacity>}
-                {aiStatus === "Loading" && <Text>Loading...</Text>}
+                {aiStatus === "Loading" && <Text style ={{color: darkMode ? Colors.dark.text : Colors.light.text}}>Loading...</Text>}
                 {aiStatus === "Generated" && (<View>
-                        <Text style={{marginTop: 10, marginBottom: 10}}>{aiMessage}</Text>
+                        <Text style={{marginTop: 10, marginBottom: 10, color: darkMode ? Colors.dark.text : Colors.light.text}}>{aiMessage}</Text>
                         <TouchableOpacity style={{backgroundColor: "lightblue", borderRadius: 10}}
                                           onPress={generateAiActivities}><Text style={{
                             paddingTop: 10,
@@ -47,7 +49,7 @@ export default function Chill() {
                             paddingRight: 10,
                             paddingLeft: 10
                         }}>Regenerate</Text></TouchableOpacity>
-                        <Text style={{marginTop: 1}}></Text>
+                        <Text style={{marginTop: 1, color: darkMode ? Colors.dark.text : Colors.light.text}}></Text>
                         <TouchableOpacity style={{backgroundColor: "lightblue", borderRadius: 10}}
                                           onPress={() => setAiStatus("Idle")}><Text style={{
                             paddingTop: 10,
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: "bold",
         marginBottom: 20,
-        marginLeft: 5
+        marginLeft: 5,
     },
     container: {
         backgroundColor: "#cf7fe8",
