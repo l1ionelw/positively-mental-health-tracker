@@ -8,6 +8,7 @@ export default function Records() {
     const logs = useContext(AppContext).logs;
     const surveyData = useContext(AppContext).surveys;
     const [allData, setAllData] = useState([]);
+    const darkMode = useContext(AppContext).userInfo.darkMode;
 
     const screenWidth = Dimensions.get("window").width;
     let surveyRatings = [];
@@ -92,33 +93,32 @@ export default function Records() {
     }, [logs, surveyData]);
 
     if (logs.length === 0 && surveyData.length === 0) {
-        return <SafeAreaView style={styles.viewMargins}><Text style={styles.header}>Records</Text><Text
+        return <SafeAreaView style={styles.viewMargins}><Text style={[styles.header, {color: (darkMode) ? Colors.dark.text : Colors.light.text}]}>Records</Text><Text
             style={{fontSize: 25}}>You haven't done anything
             yet!</Text></SafeAreaView>;
     }
 
     return (
-        <ScrollView>
+        <ScrollView style = {{backgroundColor: (darkMode) ? Colors.dark.background : Colors.light.background}}>
             <SafeAreaView style={styles.viewMargins}>
-                <Text style={styles.header}>Records</Text>
+                <Text style={[styles.header, {color: (darkMode) ? Colors.dark.text : Colors.light.text}]}>Records</Text>
                 {
                     allData.map(([dateKey, data], index) => {
                             const surveyString = `${data.mood ? `${data.mood} - ` : ""} ${data.rating ? `${data.rating}/10` : ""}`
                             return (
-                                <View style={[styles.container, {
-                                    backgroundColor: (darkMode)?Colors.dark.background : Colors.light.background,}]} key={dateKey}>
+                                <View style={[styles.container, {backgroundColor: (darkMode)?Colors.dark.widgetBackground : Colors.light.widgetBackground,}]} key={dateKey}>
                                     <View style={styles.logContainer}>
-                                        <Text>{DateTime.fromISO(dateKey).toLocaleString({
+                                        <Text style = {{color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{DateTime.fromISO(dateKey).toLocaleString({
                                             month: "long",
                                             day: "numeric",
                                             year: "numeric"
                                         })}</Text>
-                                        {<Text style={{fontWeight: "bold"}}>{data.logTitle}</Text>}
-                                        <Text>{surveyString}</Text>
+                                        {<Text style={{fontWeight: "bold", color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{data.logTitle}</Text>}
+                                        <Text style = {{color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{surveyString}</Text>
                                         {data.logCreatedAt && <>
-                                            <Text>{DateTime.fromISO(data.logCreatedAt).toFormat('hh:mm a')}</Text>
-                                            <Text>{data.logTitle}</Text>
-                                            <Text>{data.logContent}</Text>
+                                            <Text style = {{color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{DateTime.fromISO(data.logCreatedAt).toFormat('hh:mm a')}</Text>
+                                            <Text style = {{color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{data.logTitle}</Text>
+                                            <Text style = {{color: (darkMode) ? Colors.dark.text : Colors.light.text}}>{data.logContent}</Text>
                                         </>}
                                     </View>
                                 </View>

@@ -109,10 +109,10 @@ export default function NewLog() {
         <SafeAreaView style={styles.viewMargins}>
             <ScrollView keyboardDismissMode={"on-drag"} style={{height: Dimensions.get("window").height}}>
                 <Text style={styles.header}>Reflect on your day</Text>
-                <TextInput placeholderTextColor={(!darkMode) ? "#c1c1c1":"#fff"} style={[styles.titleBox, textInputColorStyle]} onChangeText={(text) => {
+                <TextInput placeholderTextColor={"#a1a1a1"} style={[styles.titleBox, textInputColorStyle]} onChangeText={(text) => {
                     setLogTitle(text)
                 }} placeholder="Enter your log's title here..."></TextInput>
-                <TextInput placeholderTextColor={(!darkMode) ? "#c1c1c1":"#fff"}  style={styles.textbox} onChangeText={(text) => {
+                <TextInput placeholderTextColor={"#a1a1a1"}  style={styles.textbox} onChangeText={(text) => {
                     setLogText(text)
                 }} placeholder="Enter your log here..."multiline={true}></TextInput>
                 <TouchableOpacity style={isLogAllowed() ? styles.submitButton : styles.submitButtonDisabled}
