@@ -31,6 +31,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ccfad0d5-32fa-47a6-a65d-0097783a6110"
+      }
+    },
+    "owner": "yikenuwu"
   }
 }

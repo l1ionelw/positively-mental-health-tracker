@@ -4,11 +4,13 @@ import {StyleSheet, Alert} from 'react-native';
 import {AppContext} from "../../context/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Colors} from "../../constants/Colors";
+import * as Notifications from "expo-notifications";
 
 export default function Settings() {
 
     const userInfo = useContext(AppContext).userInfo;
     const setUserInfo = useContext(AppContext).setUserInfo;
+    const notificationPermission = useContext(AppContext).notificationPermission;
     const [darkMode, setDarkMode] = useState(userInfo['darkMode']);
 
     const styles = StyleSheet.create({
@@ -55,6 +57,17 @@ export default function Settings() {
             color: (darkMode)?Colors.dark.text: Colors.light.text
         }
     })
+
+    async function schedulePushNotification() {
+        console.log("post push notification");
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Example Notification 🔔",
+                body: 'This is our example notification',
+            },
+            trigger: null,
+        }).catch((err)=>console.log(err));
+    }
 
     function clearAll() {
         AsyncStorage.clear().then(r => console.log("storage cleared!"));
@@ -140,7 +153,9 @@ export default function Settings() {
                 <View style={{flexGrow: 1}}></View>
             </View>
             <TouchableOpacity onPress={clearAll}><Text style = {styles.text}>Clear all data</Text></TouchableOpacity>
+            <TouchableOpacity onPress={schedulePushNotification}><Text style = {styles.text}>Send post notification</Text></TouchableOpacity>
         </SafeAreaView>
         </ScrollView>
     )
 }
+

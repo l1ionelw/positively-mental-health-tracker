@@ -8,6 +8,8 @@ import {useColorScheme} from '@/hooks/useColorScheme';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboarding from "./onboarding";
 import {AppContext} from "../context/AppContext";
+import * as Notifications from 'expo-notifications';
+import {registerPushNotificationsAsync} from "./(tabs)/registerPushNotificationsAsync";
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -23,6 +25,15 @@ export default function RootLayout() {
     const [logs, setLogs] = useState([]);
     const [surveys, setSurveys] = useState([]);
     const [userInfo, setUserInfo] = useState({});
+    const [notificationPermission, setNotificationPermission] = useState(null);
+
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+        }),
+    });
 
     useEffect(() => {
         const userInfoPromise = AsyncStorage.getItem("userInfo").then((result) => {
@@ -44,6 +55,7 @@ export default function RootLayout() {
         Promise.all([logsPromise, surveysPromise, userInfoPromise]).then(() => {
             setInfoLoaded(true); // all done loading
         })
+        registerPushNotificationsAsync();
     }, [firstAppLaunchStatus]);
 
     if (!loaded || !infoLoaded || firstAppLaunchStatus === "Loading") {
@@ -64,6 +76,7 @@ export default function RootLayout() {
                         "setSurveys": setSurveys,
                         "userInfo": userInfo,
                         "setUserInfo": setUserInfo,
+                        "notificationPermission": notificationPermission,
                     }}>
                     <Stack>
                         <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
