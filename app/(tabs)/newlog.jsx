@@ -101,7 +101,6 @@ export default function NewLog() {
         })
         setLogs(newLogsDraft);
         AsyncStorage.setItem('logs', JSON.stringify(newLogsDraft));
-        Keyboard.dismiss();
     }
 
     return (
@@ -116,7 +115,10 @@ export default function NewLog() {
                     setLogText(text)
                 }} placeholder="Enter your log here..."multiline={true}></TextInput>
                 <TouchableOpacity style={isLogAllowed() ? styles.submitButton : styles.submitButtonDisabled}
-                                  onPress={submitLog}><Text style = {{color: (darkMode)?Colors.dark.text : Colors.light.text}}>Submit</Text></TouchableOpacity>
+                                  onPress={()=> {
+                                      submitLog();
+                                      Keyboard.dismiss();
+                                  }}><Text style = {{color: (darkMode)?Colors.dark.text : Colors.light.text}}>Submit</Text></TouchableOpacity>
                 <Text style={styles.error}>{error}</Text>
             </ScrollView>
         </SafeAreaView>

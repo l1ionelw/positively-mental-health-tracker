@@ -48,7 +48,11 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "^15.8.0",
     "react-native-web": "~0.19.10",
+<<<<<<< Updated upstream:package.json
     "expo-device": "~6.0.2"
+=======
+    "react-native-push-notification": "^8.1.1"
+>>>>>>> Stashed changes:positivity-client/package.json
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
